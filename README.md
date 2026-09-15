@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 3D Gross Market — 3dgrossmarket.com
 
-## Getting Started
+Next.js 16 (App Router) + Tailwind v4. Tüm sayfalar statik üretiliyor, Vercel'de barınıyor.
 
-First, run the development server:
+## Neyi nereden düzenlersin
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+| Ne | Dosya |
+|---|---|
+| **Vizyon & Misyon metni** | `src/lib/about.ts` — `vision.text` ve `mission.text` |
+| **İletişim bilgileri** (telefon, e-posta, WhatsApp, adres) | `src/lib/site.ts` → `contact` |
+| **Ürünler** (ekleme/çıkarma/düzenleme) | `src/lib/products.ts` |
+| **Satış linkleri** | `src/lib/products.ts` → ilgili ürünün `buyUrl` alanı |
+| Menü | `src/lib/site.ts` → `nav` |
+
+## Ürün fotoğrafı ekleme
+
+1. Fotoğrafı `public/urunler/` klasörüne at (örn. `pinch-ball.jpg`).
+2. `src/lib/products.ts` içinde o ürüne `image: "/urunler/pinch-ball.jpg"` satırını ekle.
+
+Fotoğraf yoksa otomatik olarak ürüne özel bir grafik gösteriliyor — site hiçbir yerde boş görünmüyor.
+
+## Satışa açma
+
+Shopier / Trendyol / Etsy linkin hazır olduğunda:
+
+```ts
+// src/lib/products.ts
+{
+  slug: "pinch-ball",
+  ...
+  buyUrl: "https://www.shopier.com/xxxxx",   // ← bu satırı ekle
+  price: "₺249",                              // ← istersen fiyat da
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+"Hemen Satın Al" butonu otomatik aktifleşir. Link yokken ziyaretçi WhatsApp/e-posta ile sipariş verebiliyor.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## İkinci oyuncak
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`src/lib/products.ts` içinde `slug: "ikinci-oyuncak"` kaydı hazır bekliyor.
+İsmini, açıklamasını ve fotoğrafını değiştirip `comingSoon: true` satırını silmen yeterli — sayfası zaten `/oyuncaklar/<slug>` adresinde çalışıyor.
 
-## Learn More
+## Komutlar
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run dev      # yerel geliştirme → http://localhost:3000
+npm run build    # üretim derlemesi
+vercel --prod    # canlıya al
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Sayfa haritası
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `/` — ana sayfa (iş alanı tanıtımı, maskeler, kutular, iki iş alanı, satıştaki oyuncaklar, süreç, iletişim)
+- `/urunler` — tüm katalog
+- `/urunler/maskeler` · `/kutular` · `/dekor` · `/endustriyel`
+- `/oyuncaklar` — oyuncak iş alanı
+- `/oyuncaklar/pinch-ball` · `/oyuncaklar/ikinci-oyuncak` — satış sayfaları
+- `/hakkimizda` — vizyon & misyon
+- `/iletisim` — form + SSS
